@@ -21,8 +21,8 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı: " + username));
+        return email -> userRepository.findByEmail(email) // email ilə axtarırıq
+                .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı: " + email));
     }
 
     @Bean

@@ -25,7 +25,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         try {
             return Jwts.builder()
-                    .subject(userDetails.getUsername())
+                    .subject(userDetails.getUsername()) // Bu artıq email olacaq
                     .issuedAt(new Date())
                     .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
                     .signWith(getKey(), Jwts.SIG.HS256)
@@ -48,7 +48,8 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String getUsernameByToken(String token) {
+    // Token-dan email əldə etmək
+    public String getEmailByToken(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
@@ -57,7 +58,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = getUsernameByToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String email = getEmailByToken(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
