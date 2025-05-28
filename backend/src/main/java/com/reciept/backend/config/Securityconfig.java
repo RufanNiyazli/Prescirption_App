@@ -26,7 +26,7 @@ public class Securityconfig {
 
     private final static String AUTHENTICATE = "/authenticate";
     private final static String REGISTER = "/register";
-    private final static String REFRESH_TOKEN = "/refresh-token";
+    private final static String REFRESH_TOKEN = "/refresh-access";
 
 
     @Bean

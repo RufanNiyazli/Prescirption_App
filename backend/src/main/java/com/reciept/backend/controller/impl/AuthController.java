@@ -32,7 +32,8 @@ public class AuthController implements IAuthController {
     }
 
     @Override
-    public AuthResponse refreshAccessToken(String tokenStr) {
+    @PostMapping("/refresh-access")
+    public AuthResponse refreshAccessToken(@RequestBody String tokenStr) {
         return authService.refreshAccessToken(tokenStr);
     }
 
