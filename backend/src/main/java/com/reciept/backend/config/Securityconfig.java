@@ -2,6 +2,7 @@ package com.reciept.backend.config;
 
 import com.reciept.backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,13 +17,17 @@ import java.net.http.HttpRequest;
 @RequiredArgsConstructor
 public class Securityconfig {
 
+    @Autowired
     private AuthenticationProvider authenticationProvider;
+
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
-    private final static String AUTHENTICATE = "/autenticate";
+    private final static String AUTHENTICATE = "/authenticate";
     private final static String REGISTER = "/register";
     private final static String REFRESH_TOKEN = "/refresh-token";
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
