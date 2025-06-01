@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
@@ -22,8 +24,13 @@ public class Prescription {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String medicines; // JSON string for medicines
+    @ManyToMany
+    @JoinTable(
+            name = "prescription_medicines",
+            joinColumns = @JoinColumn(name = "prescription_id"),
+            inverseJoinColumns = @JoinColumn(name = "medicine_id")
+    )
+    private List<Medicine> medicines = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -31,6 +38,5 @@ public class Prescription {
     @Column(nullable = false)
     private Date createdAt;
 
-    @OneToOne(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
-    private OTP otp;
+
 }

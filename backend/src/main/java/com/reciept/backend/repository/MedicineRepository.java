@@ -12,8 +12,7 @@ import java.util.List;
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
     @Query("SELECT m FROM Medicine m WHERE " +
-            "LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(m.category) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+            "LOWER(m.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Medicine> searchByNameOrCategory(@Param("keyword") String keyword);
 
 }
