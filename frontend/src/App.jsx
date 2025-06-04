@@ -6,7 +6,8 @@ import Dashboard from "./Components/Main/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
+import Reciept from "./Components/Main/Reciept";
 function App() {
   return (
     <>
@@ -19,6 +20,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reciept"
+            element={
+              <ProtectedRoute>
+                <Reciept />
               </ProtectedRoute>
             }
           />

@@ -17,7 +17,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
-    return config; // ← Düzəldildi: config qaytarılır, token deyil
+    return config; //  Düzəldildi: config qaytarılır, token deyil
   },
   (error) => Promise.reject(error)
 );

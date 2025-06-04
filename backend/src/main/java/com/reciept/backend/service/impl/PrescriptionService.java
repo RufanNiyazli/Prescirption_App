@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,6 +74,32 @@ public class PrescriptionService implements IPrescriptionService {
         );
 
         return responseDto;
+    }
+
+    @Override
+    public PrescriptionResponseDto getPrescription(Long id) {
+        Optional<Prescription> optional = prescriptionRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new RuntimeException();
+        }
+        PrescriptionResponseDto response = new PrescriptionResponseDto();
+        response.setId(id);
+        response.setUserId(optional.get().getUser().getId());
+        response.setNotes(optional.get().getNotes());
+        response.setCreatedAt(optional.get().getCreatedAt());
+        response.setMedicines(
+                optional.get().getMedicines().stream().map(medicine -> {
+                    return new MedicineResponseDto(
+                            medicine.getId(),
+                            medicine.getName(),
+                            medicine.getCategory(),
+                            medicine.getDosageForm()
+                    );
+                }).collect(Collectors.toList())
+        );
+
+
+        return response;
     }
 
 }

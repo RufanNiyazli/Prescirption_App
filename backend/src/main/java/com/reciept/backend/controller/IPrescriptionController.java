@@ -6,4 +6,6 @@ import com.reciept.backend.dto.PrescriptionResponseDto;
 public interface IPrescriptionController {
     public PrescriptionResponseDto savePrescription(PrescriptionRequest request);
 
+    public PrescriptionResponseDto getPrescription(Long id);
+
 }

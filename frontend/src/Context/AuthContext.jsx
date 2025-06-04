@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
+  
 
   const registerUser = async (data) => {
     try {
