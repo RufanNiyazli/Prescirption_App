@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../css/Dashboard.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { createPrescription } from "../../Redux/prescriptionSlice";
 import {
   fetchMedicine,
   selectMedicine,
@@ -12,6 +13,24 @@ import {
 const Dashboard = () => {
   const [keyword, setKeyWord] = useState("");
   const dispatch = useDispatch();
+
+  const [notesMap, setNotesMap] = useState({});
+  const userId = 1;
+  
+  const handleNoteChange = (id, value) => {
+    setNotesMap((prev) => ({ ...prev, [id]: value }));
+  };
+  
+  const handleConfirm = () => {
+    const medicineIds = selectedMedicines.map((m) => m.id);
+    const notes = selectedMedicines
+      .map((m) => notesMap[m.id] || "")
+      .join(" | ");
+
+    dispatch(createPrescription({ userId, medicineIds, notes }));
+    dispatch(clearMedicine());
+    setNotesMap({});
+  };
 
   const { searchResults, selectedMedicines, loading } = useSelector(
     (state) => state.medicine
@@ -32,17 +51,23 @@ const Dashboard = () => {
 
   const handleRemove = (id) => {
     dispatch(removeMedicine(id));
+    setNotesMap((prev) => {
+      const newMap = { ...prev };
+      delete newMap[id];
+      return newMap;
+    });
   };
 
   const clearAll = () => {
     dispatch(clearMedicine());
+    setNotesMap({});
   };
 
   return (
     <div className="main">
       <div className="header">
-        <h1 className="greeting">Welcome to MediSearch</h1>
-        <p className="subtitle">Search and select medicines easily</p>
+        <h1 className="greeting">MediSearch Pro</h1>
+        <p className="subtitle">Professional Medicine Search & Prescription Management System</p>
       </div>
 
       <div className="search-section">
@@ -65,7 +90,7 @@ const Dashboard = () => {
               type="text"
               value={keyword}
               onChange={(e) => setKeyWord(e.target.value)}
-              placeholder="Search for medicines..."
+              placeholder="Search for medicines by name, condition, or active ingredient..."
               className="search-input"
             />
           </div>
@@ -75,12 +100,12 @@ const Dashboard = () => {
               {loading ? (
                 <div className="loading-container">
                   <div className="spinner"></div>
-                  <span className="loading-text">Searching...</span>
+                  <span className="loading-text">Searching medical database...</span>
                 </div>
               ) : searchResults.length > 0 ? (
                 <div className="results-container">
                   <h3 className="results-title">
-                    Search Results ({searchResults.length})
+                    Found {searchResults.length} medicine{searchResults.length !== 1 ? 's' : ''}
                   </h3>
                   {searchResults.map((medicine) => (
                     <div key={medicine.id} className="medicine-item">
@@ -104,8 +129,8 @@ const Dashboard = () => {
                         }`}
                       >
                         {selectedMedicines.find((m) => m.id === medicine.id)
-                          ? "Selected"
-                          : "Select"}
+                          ? "✅ Selected"
+                          : "➕ Select"}
                       </button>
                     </div>
                   ))}
@@ -127,7 +152,8 @@ const Dashboard = () => {
                         d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.463-.64-6.327-1.76C3.688 12.78 3 11.427 3 10c0-4.418 3.582-8 8-8s8 3.582 8 8c0 1.427-.688 2.78-2.673 3.24A7.96 7.96 0 0112 15z"
                       />
                     </svg>
-                    <p>No medicines found for "{keyword}"</p>
+                    <h3>No medicines found</h3>
+                    <p>Try searching with different keywords for "{keyword}"</p>
                   </div>
                 )
               )}
@@ -152,14 +178,6 @@ const Dashboard = () => {
           <div className="selected-medicines">
             {selectedMedicines.map((medicine) => (
               <div key={medicine.id} className="selected-medicine-item">
-                <div className="selected-medicine-info">
-                  <h4 className="selected-medicine-name">{medicine.name}</h4>
-                  {medicine.description && (
-                    <p className="selected-medicine-description">
-                      {medicine.description}
-                    </p>
-                  )}
-                </div>
                 <button
                   onClick={() => handleRemove(medicine.id)}
                   className="remove-btn"
@@ -179,6 +197,23 @@ const Dashboard = () => {
                     />
                   </svg>
                 </button>
+                <div className="selected-medicine-info">
+                  <h4 className="selected-medicine-name">{medicine.name}</h4>
+                  {medicine.description && (
+                    <p className="selected-medicine-description">
+                      {medicine.description}
+                    </p>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder="Add prescription notes..."
+                  value={notesMap[medicine.id] || ""}
+                  onChange={(e) =>
+                    handleNoteChange(medicine.id, e.target.value)
+                  }
+                  className="medicine-note-input"
+                />
               </div>
             ))}
           </div>
@@ -197,12 +232,21 @@ const Dashboard = () => {
                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 00-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
               />
             </svg>
-            <p className="empty-state-title">No medicines selected yet</p>
+            <h3 className="empty-state-title">No medicines selected yet</h3>
             <p className="empty-state-subtitle">
-              Search and select medicines to see them here
+              Search and select medicines to create a prescription
             </p>
           </div>
         )}
+      </div>
+
+      <div className="confirm">
+        <button 
+          onClick={handleConfirm}
+          disabled={selectedMedicines.length === 0}
+        >
+          ✅ Confirm Prescription
+        </button>
       </div>
     </div>
   );
