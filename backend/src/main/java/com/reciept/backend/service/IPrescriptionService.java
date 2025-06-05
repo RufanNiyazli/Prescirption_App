@@ -7,5 +7,5 @@ import com.reciept.backend.entity.Medicine;
 public interface IPrescriptionService {
     public PrescriptionResponseDto savePrescription(PrescriptionRequest request);
 
-    public PrescriptionResponseDto getPrescription(Long id);
+    public PrescriptionResponseDto getPrescription(String hashId);
 }

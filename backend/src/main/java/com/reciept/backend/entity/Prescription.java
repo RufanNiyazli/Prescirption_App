@@ -38,5 +38,7 @@ public class Prescription {
     @Column(nullable = false)
     private Date createdAt;
 
+    private String hashId;
+
 
 }

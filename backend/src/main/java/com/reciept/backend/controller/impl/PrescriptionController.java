@@ -24,8 +24,8 @@ public class PrescriptionController implements IPrescriptionController {
 
     @Override
     @GetMapping("/get-prescription")
-    public PrescriptionResponseDto getPrescription(Long id) {
-        return prescriptionService.getPrescription(id);
+    public PrescriptionResponseDto getPrescription(String hashId) {
+        return prescriptionService.getPrescription(hashId);
     }
 
 }
