@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "../../css/RegisterForm.css";
 
 const RegisterForm = () => {
   const { registerUser } = useContext(AuthContext);
@@ -14,48 +15,71 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
     try {
       await registerUser(formData);
       navigate("/dashboard");
     } catch (error) {
-      setError("Register uğursuz oldu: " + error.message);
+      setError("Qeydiyyat uğursuz oldu: " + error.message);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
-          }
-          placeholder="Username"
-          value={formData.username}
-        />
+    <div className="register-container">
+      <div className="register-form">
+        <h2 className="register-title">Qeydiyyat</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              className="form-input"
+              type="text"
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
+              placeholder="İstifadəçi adı"
+              value={formData.username}
+              required
+            />
+          </div>
 
-        <input
-          type="email"
-          value={formData.email}
-          onChange={(e) =>
-            setFormData({ ...formData, email: e.target.value })
-          }
-          placeholder="Email"
-        />
+          <div className="form-group">
+            <input
+              className="form-input"
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              placeholder="Email"
+              required
+            />
+          </div>
 
-        <input
-          type="password"
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-          placeholder="Password"
-        />
+          <div className="form-group">
+            <input
+              className="form-input"
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              placeholder="Şifrə"
+              required
+            />
+          </div>
 
-        <button type="submit">Register</button>
-      </form>
+          <button className="submit-button" type="submit">
+            Qeydiyyatdan keç
+          </button>
+        </form>
 
-      {error && <p>{error}</p>}
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="login-link">
+          Artıq hesabınız var? <a href="/login">Giriş edin</a>
+        </div>
+      </div>
     </div>
   );
 };
