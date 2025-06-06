@@ -9,6 +9,7 @@ import {
   removeMedicine,
   clearMedicine,
 } from "../../Redux/medicineSlice";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [keyword, setKeyWord] = useState("");
@@ -16,21 +17,26 @@ const Dashboard = () => {
 
   const [notesMap, setNotesMap] = useState({});
   const userId = 1;
-  
+  const navigate = useNavigate();
+
   const handleNoteChange = (id, value) => {
     setNotesMap((prev) => ({ ...prev, [id]: value }));
   };
-  
-  const handleConfirm = () => {
-    const medicineIds = selectedMedicines.map((m) => m.id);
-    const notes = selectedMedicines
-      .map((m) => notesMap[m.id] || "")
-      .join(" | ");
+const handleConfirm = async () => {
+  const medicineIds = selectedMedicines.map((m) => m.id);
+  const notes = selectedMedicines
+    .map((m) => notesMap[m.id] || "")
+    .join(" | ");
 
-    dispatch(createPrescription({ userId, medicineIds, notes }));
+  const response = await dispatch(createPrescription({ userId, medicineIds, notes }));
+
+  if (response.meta.requestStatus === "fulfilled") {
+    const hashId = response.payload.hashId;
     dispatch(clearMedicine());
     setNotesMap({});
-  };
+    navigate(`/receipt/${hashId}`);
+  }
+};
 
   const { searchResults, selectedMedicines, loading } = useSelector(
     (state) => state.medicine
@@ -67,7 +73,9 @@ const Dashboard = () => {
     <div className="main">
       <div className="header">
         <h1 className="greeting">MediSearch Pro</h1>
-        <p className="subtitle">Professional Medicine Search & Prescription Management System</p>
+        <p className="subtitle">
+          Professional Medicine Search & Prescription Management System
+        </p>
       </div>
 
       <div className="search-section">
@@ -100,12 +108,15 @@ const Dashboard = () => {
               {loading ? (
                 <div className="loading-container">
                   <div className="spinner"></div>
-                  <span className="loading-text">Searching medical database...</span>
+                  <span className="loading-text">
+                    Searching medical database...
+                  </span>
                 </div>
               ) : searchResults.length > 0 ? (
                 <div className="results-container">
                   <h3 className="results-title">
-                    Found {searchResults.length} medicine{searchResults.length !== 1 ? 's' : ''}
+                    Found {searchResults.length} medicine
+                    {searchResults.length !== 1 ? "s" : ""}
                   </h3>
                   {searchResults.map((medicine) => (
                     <div key={medicine.id} className="medicine-item">
@@ -241,7 +252,7 @@ const Dashboard = () => {
       </div>
 
       <div className="confirm">
-        <button 
+        <button
           onClick={handleConfirm}
           disabled={selectedMedicines.length === 0}
         >

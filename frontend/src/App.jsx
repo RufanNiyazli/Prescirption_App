@@ -4,37 +4,28 @@ import Login from "./Components/Auth/LoginForm";
 import Register from "./Components/Auth/RegisterForm";
 import Dashboard from "./Components/Main/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
-import { Routes } from "react-router-dom";
-import { Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import Reciept from "./Components/Main/Reciept";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Receipt from "./Components/Main/Receipt";
+
 function App() {
   return (
-    <>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reciept"
-            element={
-              <ProtectedRoute>
-                <Reciept />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/login" />} />
-        </Routes>
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+   
+        <Route path="/receipt/:hashId" element={<Receipt />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+      </Routes>
+    </AuthProvider>
   );
 }
 

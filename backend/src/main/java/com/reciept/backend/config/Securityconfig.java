@@ -27,6 +27,7 @@ public class Securityconfig {
     private final static String AUTHENTICATE = "/authenticate";
     private final static String REGISTER = "/register";
     private final static String REFRESH_TOKEN = "/refresh-access";
+    private final static String GET_PRESCRIPTION = "/get-prescription";
 
 
     @Bean
@@ -42,7 +43,7 @@ public class Securityconfig {
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AUTHENTICATE, REGISTER, REFRESH_TOKEN).permitAll()
+                        .requestMatchers(AUTHENTICATE, REGISTER, REFRESH_TOKEN, GET_PRESCRIPTION).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -50,7 +51,6 @@ public class Securityconfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
 
 
 }

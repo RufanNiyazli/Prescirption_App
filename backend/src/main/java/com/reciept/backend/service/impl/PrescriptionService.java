@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,14 +49,11 @@ public class PrescriptionService implements IPrescriptionService {
                 request.getCreatedAt() != null ? request.getCreatedAt() : new Date()
         );
 
+        newPrescription.setHashId(UUID.randomUUID().toString().substring(0, 8));
+
 
         Prescription dbPrescription = prescriptionRepository.save(newPrescription);
 
-
-        String hashId = HashUtil.hashId(dbPrescription.getId());
-        dbPrescription.setHashId(hashId);
-
-        dbPrescription = prescriptionRepository.save(dbPrescription);
 
         PrescriptionResponseDto responseDto = new PrescriptionResponseDto();
         responseDto.setId(dbPrescription.getId());
@@ -70,6 +68,8 @@ public class PrescriptionService implements IPrescriptionService {
                         medicine.getDosageForm()
                 )).collect(Collectors.toList())
         );
+        responseDto.setHashId(dbPrescription.getHashId());
+
 
         return responseDto;
     }
@@ -81,6 +81,7 @@ public class PrescriptionService implements IPrescriptionService {
                 .orElseThrow(() -> new RuntimeException("Prescription not found for provided hashId."));
 
         PrescriptionResponseDto response = new PrescriptionResponseDto();
+
         response.setId(prescription.getId());
         response.setUserId(prescription.getUser().getId());
         response.setNotes(prescription.getNotes());
@@ -95,6 +96,7 @@ public class PrescriptionService implements IPrescriptionService {
                         ))
                         .collect(Collectors.toList())
         );
+        response.setHashId(prescription.getHashId());
         return response;
     }
 

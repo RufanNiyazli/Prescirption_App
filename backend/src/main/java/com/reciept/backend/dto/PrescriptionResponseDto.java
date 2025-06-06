@@ -17,4 +17,5 @@ public class PrescriptionResponseDto {
     private List<MedicineResponseDto> medicines;
     private String notes;
     private Date createdAt;
+    private String hashId;
 }

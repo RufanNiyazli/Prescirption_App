@@ -5,10 +5,7 @@ import com.reciept.backend.dto.PrescriptionRequest;
 import com.reciept.backend.dto.PrescriptionResponseDto;
 import com.reciept.backend.service.IPrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PrescriptionController implements IPrescriptionController {
@@ -24,7 +21,7 @@ public class PrescriptionController implements IPrescriptionController {
 
     @Override
     @GetMapping("/get-prescription")
-    public PrescriptionResponseDto getPrescription(String hashId) {
+    public PrescriptionResponseDto getPrescription(@RequestParam String hashId) {
         return prescriptionService.getPrescription(hashId);
     }
 
