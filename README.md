@@ -1,4 +1,9 @@
 ﻿# Medical Prescription System
+ <video width="600" controls>
+  <source src="https://github.com/RufanNiyazli/Prescirption_App/raw/main/Prescription.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 
 A comprehensive medical prescription management system built with React frontend and Spring Boot backend. This system allows healthcare professionals to search for medicines, create prescriptions, and generate shareable prescription receipts with unique hash-based links.
 
