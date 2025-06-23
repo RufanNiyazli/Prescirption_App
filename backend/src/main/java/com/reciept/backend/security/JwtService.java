@@ -25,7 +25,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         try {
             return Jwts.builder()
-                    .subject(userDetails.getUsername()) // Bu artıq email olacaq
+                    .subject(userDetails.getUsername())
                     .issuedAt(new Date())
                     .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
                     .signWith(getKey(), Jwts.SIG.HS256)
